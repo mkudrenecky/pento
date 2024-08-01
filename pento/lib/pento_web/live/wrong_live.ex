@@ -7,7 +7,8 @@ defmodule PentoWeb.WrongLive do
        score: 0,
        message: "Make a guess homie:",
        time: time(),
-       answer: :rand.uniform(10) |> to_string()
+       answer: :rand.uniform(10) |> to_string(),
+       guess: nil
      )}
   end
 
@@ -29,12 +30,18 @@ defmodule PentoWeb.WrongLive do
         </.link>
       <% end %>
     </h2>
+    <br />
+    <%= if @guess == @answer do %>
+      <h2>hello winner</h2>
+      <.link phx-click="reset"> You win! Click to play again!</.link>
+    <% end %>
     """
   end
 
   def handle_event("guess", %{"number" => guess}, socket) do
     time = time()
     answer = socket.assigns.answer
+    assign(socket, guess: guess)
 
     cond do
       guess == answer ->
@@ -44,13 +51,15 @@ defmodule PentoWeb.WrongLive do
 
       true ->
         score = socket.assigns.score - 1
-        message = "Wrong guess!, guess again"
+        message = "#{guess}! Wrong guess! Guess again"
         {:noreply, assign(socket, message: message, score: score, time: time)}
     end
+  end
+
+  def handle_event("reset", _socket) do
   end
 
   def time() do
     DateTime.utc_now() |> to_string
   end
 end
-
