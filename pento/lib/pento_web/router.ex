@@ -18,8 +18,7 @@ defmodule PentoWeb.Router do
   end
 
   scope "/", PentoWeb do
-    pipe_through :browser
-
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
     get "/", PageController, :home
   end
 
