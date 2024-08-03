@@ -1,14 +1,16 @@
 defmodule PentoWeb.WrongLive do
   use PentoWeb, :live_view
+  alias Pento.Accounts
 
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     {:ok,
      assign(socket,
        score: 0,
        message: "Make a guess homie:",
        time: time(),
        answer: :rand.uniform(10) |> to_string(),
-       guess: nil
+       guess: nil,
+       session_id: session["live_socket_id"]
      )}
   end
 
@@ -31,6 +33,10 @@ defmodule PentoWeb.WrongLive do
       <% end %>
     </h2>
     <br />
+    <pre>
+    <%= @current_user.email %>
+    <%= @session_id %>
+    </pre>
     <%= if @guess == @answer do %>
       <h2>hello winner</h2>
       <.link phx-click="reset"> You win! Click to play again!</.link>
@@ -63,3 +69,4 @@ defmodule PentoWeb.WrongLive do
     DateTime.utc_now() |> to_string
   end
 end
+
