@@ -1,15 +1,14 @@
 defmodule PentoWeb.WrongLive do
   use PentoWeb, :live_view
 
-  def mount(_params, session, socket) do
+  def mount(_params, _session, socket) do
     {:ok,
      assign(socket,
        score: 0,
        message: "Make a guess homie:",
        time: time(),
        answer: :rand.uniform(10) |> to_string(),
-       guess: nil,
-       session_id: session["live_socket_id"]
+       guess: nil
      )}
   end
 
@@ -69,4 +68,3 @@ defmodule PentoWeb.WrongLive do
     DateTime.utc_now() |> to_string
   end
 end
-
